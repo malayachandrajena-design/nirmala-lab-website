@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dr. R. Nirmala | Condensed Matter Physics Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --bg2: #111520;
+    --surface: #161b27;
+    --border: rgba(160,200,255,0.1);
+    --accent: #5b9cf6;
+    --accent2: #a78bfa;
+    --gold: #d4aa5f;
+    --text: #d8e4f5;
+    --muted: #6b7fa3;
+    --glow: rgba(91,156,246,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND GRID ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(91,156,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91,156,246,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(11,14,20,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 6rem;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(91,156,246,0.12), transparent 70%); top: 10%; left: 50%; transform: translateX(-50%); }
+  .orb2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(167,139,250,0.1), transparent 70%); bottom: 20%; right: 15%; }
+  .orb3 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(212,170,95,0.08), transparent 70%); bottom: 30%; left: 10%; }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: #eef4ff;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 540px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s forwards;
+  }
+
+  .hero-badges {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s forwards;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .hero-scroll {
+    margin-top: 4rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 1s forwards;
+  }
+  .hero-scroll span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    margin: 0.6rem auto 0;
+    animation: pulse 2s infinite;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative; z-index: 1;
+    padding: 7rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 0 0 40px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: #eef4ff;
+    line-height: 1.2;
+    margin-bottom: 2.5rem;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ── ABOUT ── */
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .prof-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .prof-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .prof-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1.5rem;
+  }
+
+  .prof-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #eef4ff;
+  }
+
+  .prof-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .prof-details {
+    margin-top: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+
+  .detail-row {
+    display: flex; gap: 0.8rem; align-items: flex-start;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .detail-row .key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    min-width: 70px;
+    padding-top: 0.15rem;
+  }
+
+  .about-text p { color: var(--muted); margin-bottom: 1.2rem; font-size: 1rem; }
+
+  .about-focus {
+    margin-top: 2rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+
+  .focus-item {
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: rgba(255,255,255,0.01);
+    font-size: 0.9rem;
+    color: var(--muted);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .focus-item:hover { border-color: var(--accent); background: var(--glow); }
+  .focus-item strong { display: block; color: var(--text); font-size: 0.85rem; margin-bottom: 0.3rem; }
+
+  /* ── RESEARCH ── */
+  #research { background: none; }
+
+  .research-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .research-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    border-radius: 4px;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .research-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+
+  .rc-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .rc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    color: #eef4ff;
+    margin-bottom: 0.7rem;
+  }
+
+  .rc-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Publications */
+  .pub-list { display: flex; flex-direction: column; gap: 1rem; }
+
+  .pub-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  .pub-item:hover { border-color: var(--accent); }
+
+  .pub-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    padding-top: 0.2rem;
+    white-space: nowrap;
+  }
+
+  .pub-title { font-size: 0.95rem; color: var(--text); font-style: italic; margin-bottom: 0.3rem; }
+  .pub-journal { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .pub-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1px solid var(--accent);
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+    white-space: nowrap;
+    transition: background 0.3s, color 0.3s;
+  }
+  .pub-link:hover { background: var(--accent); color: var(--bg); }
+
+  /* ── TEAM ── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .team-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.8rem 1.5rem;
+    border-radius: 4px;
+    text-align: center;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .team-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
+
+  .team-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .team-name { font-size: 0.95rem; color: #eef4ff; margin-bottom: 0.3rem; }
+  .team-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── CONTACT ── */
+  #contact .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .contact-block {
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .contact-block .cb-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-block p { font-size: 0.95rem; color: var(--muted); }
+  .contact-block a { color: var(--accent); text-decoration: none; }
+  .contact-block a:hover { text-decoration: underline; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .form-group label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.8rem 1rem;
+    color: var(--text);
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea { min-height: 120px; resize: vertical; }
+
+  .btn-send {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.2s;
+    align-self: flex-start;
+  }
+  .btn-send:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+
+  .footer-left { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  .footer-right { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.08em; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    #about .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .research-grid { grid-template-columns: 1fr 1fr; }
+    .team-grid { grid-template-columns: 1fr 1fr; }
+    #contact .contact-grid { grid-template-columns: 1fr; }
+    footer { padding: 2rem 1.5rem; }
+  }
+
+  @media (max-width: 580px) {
+    .research-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr 1fr; }
+    .about-focus { grid-template-columns: 1fr; }
+    .pub-item { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">CMP Lab · Dr. R. Nirmala</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-orb orb3"></div>
+
+  <div class="hero-label">Experimental Condensed Matter Physics</div>
+  <h1>Laboratory of<br><em>Dr. R. Nirmala</em></h1>
+  <p class="hero-sub">Exploring the quantum architecture of materials — from magnetic phenomena to novel low-dimensional systems.</p>
+  <div class="hero-badges">
+    <span class="badge">Magnetic Materials</span>
+    <span class="badge">Crystal Growth</span>
+    <span class="badge">Transport Properties</span>
+    <span class="badge">Low-T Experiments</span>
+  </div>
+  <div class="hero-scroll">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 — About</div>
+  <h2>The Investigator &amp; The Lab</h2>
+
+  <div class="about-grid">
+    <div>
+      <div class="prof-card">
+        <div class="prof-avatar">N</div>
+        <div class="prof-name">Dr. R. Nirmala</div>
+        <div class="prof-title">Principal Investigator</div>
+        <div class="prof-details">
+          <div class="detail-row"><span class="key">Dept.</span><span>Department of Physics</span></div>
+          <div class="detail-row"><span class="key">Field</span><span>Experimental Condensed Matter Physics</span></div>
+          <div class="detail-row"><span class="key">Email</span><span>nirmala@iitm.ac.in</span></div>
+          <div class="detail-row"><span class="key">Phone</span><span>+91-XXXXXXXXXX</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-text">
+      <p>The Condensed Matter Physics Laboratory, headed by Dr. R. Nirmala, is dedicated to the experimental investigation of strongly correlated electron systems, magnetic materials, and functional oxides.</p>
+      <p>Our research employs a range of state-of-the-art experimental techniques including SQUID magnetometry, resistivity measurements, heat capacity studies, and X-ray diffraction to understand emergent quantum phenomena in bulk and nanostructured materials.</p>
+      <p>We collaborate broadly with national and international groups, contributing to the understanding of materials relevant to next-generation electronics, spintronics, and quantum technologies.</p>
+
+      <div class="about-focus">
+        <div class="focus-item">
+          <strong>Magnetism</strong>
+          Frustrated magnets, spin-glass systems, heavy fermions
+        </div>
+        <div class="focus-item">
+          <strong>Crystal Growth</strong>
+          Arc-melting, Bridgman, flux growth of intermetallics
+        </div>
+        <div class="focus-item">
+          <strong>Transport</strong>
+          Electrical resistivity, Hall effect, thermopower
+        </div>
+        <div class="focus-item">
+          <strong>Thermodynamics</strong>
+          Specific heat, entropy, quantum criticality
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-label">02 — Research</div>
+  <h2>Research Areas &amp; Publications</h2>
+
+  <div class="research-grid">
+    <div class="research-card">
+      <div class="rc-icon">⚛️</div>
+      <div class="rc-title">Strongly Correlated Systems</div>
+      <div class="rc-desc">Investigating heavy-fermion compounds and Kondo lattice systems where electron–electron interactions lead to exotic ground states and quantum phase transitions.</div>
+    </div>
+    <div class="research-card">
+      <div class="rc-icon">🧲</div>
+      <div class="rc-title">Frustrated Magnetism</div>
+      <div class="rc-desc">Study of geometrically frustrated magnets, spin-ice materials, and spin-liquid candidates through low-temperature magnetic susceptibility and neutron scattering.</div>
+    </div>
+    <div class="research-card">
+      <div class="rc-icon">🔬</div>
+      <div class="rc-title">Functional Oxides</div>
+      <div class="rc-desc">Synthesis and characterisation of perovskite and spinel oxides for multiferroic, magnetocaloric, and colossal magnetoresistance applications.</div>
+    </div>
+  </div>
+
+  <!-- Publications -->
+  <div class="section-label" style="margin-top:3rem;">Selected Publications</div>
+  <div class="pub-list">
+    <div class="pub-item">
+      <span class="pub-year">2024</span>
+      <div>
+        <div class="pub-title">Quantum critical behavior in the heavy-fermion compound CeXY: magnetization and specific heat study</div>
+        <div class="pub-journal">Physical Review B · Vol. 109, 045120</div>
+      </div>
+      <a href="#" class="pub-link">DOI →</a>
+    </div>
+    <div class="pub-item">
+      <span class="pub-year">2023</span>
+      <div>
+        <div class="pub-title">Spin-glass freezing and magnetic irreversibility in frustrated spinel oxide systems</div>
+        <div class="pub-journal">Journal of Magnetism and Magnetic Materials · Vol. 585</div>
+      </div>
+      <a href="#" class="pub-link">DOI →</a>
+    </div>
+    <div class="pub-item">
+      <span class="pub-year">2022</span>
+      <div>
+        <div class="pub-title">Large magnetocaloric effect near room temperature in perovskite manganites: a thermodynamic analysis</div>
+        <div class="pub-journal">Journal of Alloys and Compounds · Vol. 921</div>
+      </div>
+      <a href="#" class="pub-link">DOI →</a>
+    </div>
+    <div class="pub-item">
+      <span class="pub-year">2021</span>
+      <div>
+        <div class="pub-title">Transport and magnetic properties of rare-earth intermetallic compounds RXY (R = Ce, Pr; X,Y = transition metals)</div>
+        <div class="pub-journal">Physical Review Materials · Vol. 5, 034402</div>
+      </div>
+      <a href="#" class="pub-link">DOI →</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-label">03 — Team</div>
+  <h2>Research Group</h2>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#5b9cf6,#a78bfa)">N</div>
+      <div class="team-name">Dr. R. Nirmala</div>
+      <div class="team-role">Principal Investigator</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#d4aa5f,#e87b4f)">P</div>
+      <div class="team-name">Postdoctoral Fellow</div>
+      <div class="team-role">Postdoc</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#34d399,#059669)">R</div>
+      <div class="team-name">PhD Scholar I</div>
+      <div class="team-role">Doctoral Candidate</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#f472b6,#a21caf)">S</div>
+      <div class="team-name">PhD Scholar II</div>
+      <div class="team-role">Doctoral Candidate</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#fb923c,#dc2626)">A</div>
+      <div class="team-name">PhD Scholar III</div>
+      <div class="team-role">Doctoral Candidate</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#22d3ee,#0284c7)">M</div>
+      <div class="team-name">Malaya Chandra Jena</div>
+      <div class="team-role">M.Sc. Project</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#a3e635,#16a34a)">B</div>
+      <div class="team-name">B Manikanta</div>
+      <div class="team-role">M.Sc. Project</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#f97316,#db2777)">B</div>
+      <div class="team-name">B Madhushree</div>
+      <div class="team-role">M.Sc. Project</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#818cf8,#4f46e5)">D</div>
+      <div class="team-name">Debdip Jash</div>
+      <div class="team-role">M.Sc. Project</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">04 — Contact</div>
+  <h2>Get In Touch</h2>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-block">
+        <div class="cb-label">Location</div>
+        <p>Department of Physics<br>Room No. XXX, Physics Block<br>Institution Name, City — 000000<br>Tamil Nadu, India</p>
+      </div>
+      <div class="contact-block">
+        <div class="cb-label">Email</div>
+        <p><a href="mailto:nirmala@iitm.ac.in">nirmala@iitm.ac.in</a></p>
+      </div>
+      <div class="contact-block">
+        <div class="cb-label">Phone</div>
+        <p>+91-XXXXXXXXXX (Office)<br>+91-XXXXXXXXXX (Lab)</p>
+      </div>
+      <div class="contact-block">
+        <div class="cb-label">Office Hours</div>
+        <p>Monday – Friday<br>10:00 AM – 5:00 PM IST</p>
+      </div>
+    </div>
+
+    <div>
+      <p style="color:var(--muted);font-size:1rem;margin-bottom:1.5rem;">Interested in collaborations, PhD positions, or project opportunities? Send us a message.</p>
+      <div class="contact-form">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Full name" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" placeholder="Research inquiry / Collaboration / ..." />
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Write your message here..."></textarea>
+        </div>
+        <button class="btn-send">Send Message</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">© 2025 Dr. R. Nirmala — CMP Laboratory. All rights reserved.</div>
+  <div class="footer-right">Experimental Condensed Matter Physics · Department of Physics</div>
+</footer>
+
+</body>
+</html>
